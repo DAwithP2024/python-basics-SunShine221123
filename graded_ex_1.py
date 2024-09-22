@@ -111,14 +111,14 @@ def main():
             
             elif option == 2:
                 sort_order = int(input("Enter 1 for ascending order or 2 for descending order: "))
-                display_sorted_products(selected_products, sort_order)
+                selected_products = dict(display_sorted_products(selected_products, sort_order))
             
             elif option == 3:
                 break
             
             elif option == 4:
                 if cart:
-                    total_cost = sum(selected_products[product] * quantity for product, quantity in cart)
+                    total_cost = sum(products[category][product] * quantity for category in products for product, quantity in cart if product in products[category])
                     address = input("Enter your delivery address: ")
                     generate_receipt(name, email, cart, total_cost, address)
                 else:
