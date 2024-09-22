@@ -1,3 +1,5 @@
+import re
+
 products = {
     "IT Products": [
         ("Laptop", 1000),
@@ -31,7 +33,7 @@ products = {
 
 def display_sorted_products(products_list, sort_order):
     sorted_products = sorted(products_list, key=lambda x: x[1], reverse=(sort_order == "desc"))
-    return sorted_products  # Return the sorted list
+    return sorted_products
 
 def display_products(products):
     for category, items in products.items():
@@ -75,17 +77,18 @@ def generate_receipt(name, email, cart, total_cost, address):
     print(f"Total Cost: ${total_cost:.2f}")
 
 def validate_name(name):
-    return len(name) > 0
+    return len(name.strip()) > 0  # Validate that the name is not empty
 
 def validate_email(email):
-    return "@" in email and "." in email
+    # Use regex to validate the email format
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    return re.match(email_regex, email) is not None
 
 def main():
     cart = {}
     display_categories()
     display_products(products)
     
-    # Example interaction
     while True:
         product = input("\nEnter product name to add to cart (or 'done' to finish): ")
         if product.lower() == 'done':
