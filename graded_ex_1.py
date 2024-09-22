@@ -48,6 +48,8 @@ def display_categories():
         print(f"{index}: {category}")
 
 def add_to_cart(cart, product, quantity):
+    if quantity <= 0:
+        raise ValueError("Quantity must be greater than zero.")
     if product in cart:
         cart[product] += quantity
     else:
@@ -77,12 +79,11 @@ def generate_receipt(name, email, cart, total_cost, address):
     print(f"Total Cost: ${total_cost:.2f}")
 
 def validate_name(name):
-    return len(name.strip()) > 0  # Validate that the name is not empty
+    return isinstance(name, str) and len(name.strip()) > 0  # Ensure it's a non-empty string
 
 def validate_email(email):
-    # Use regex to validate the email format
     email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
-    return re.match(email_regex, email) is not None
+    return isinstance(email, str) and re.match(email_regex, email) is not None
 
 def main():
     cart = {}
@@ -94,7 +95,10 @@ def main():
         if product.lower() == 'done':
             break
         quantity = int(input("Enter quantity: "))
-        add_to_cart(cart, product, quantity)
+        try:
+            add_to_cart(cart, product, quantity)
+        except ValueError as e:
+            print(e)
     
     display_cart(cart)
     
