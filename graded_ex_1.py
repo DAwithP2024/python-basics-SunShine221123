@@ -1,4 +1,3 @@
-# Products available in the store by category
 products = {
     "IT Products": [
         ("Laptop", 1000),
@@ -30,43 +29,85 @@ products = {
     ]
 }
 
-
 def display_sorted_products(products_list, sort_order):
-    pass
+    sorted_products = sorted(products_list, key=lambda x: x[1], reverse=(sort_order == "desc"))
+    return sorted_products  # Return the sorted list
 
-
-def display_products(products_list):
-    pass
-
+def display_products(products):
+    for category, items in products.items():
+        print(f"\n{category}:")
+        sorted_products = display_sorted_products(items, "asc")
+        for product, price in sorted_products:
+            print(f"{product}: ${price:.2f}")
 
 def display_categories():
-    pass
-
+    print("Available Categories:")
+    for index, category in enumerate(products.keys()):
+        print(f"{index}: {category}")
 
 def add_to_cart(cart, product, quantity):
-    pass
+    if product in cart:
+        cart[product] += quantity
+    else:
+        cart[product] = quantity
 
 def display_cart(cart):
-    pass
-
+    if not cart:
+        print("Your cart is empty.")
+        return
+    print("\nYour Cart:")
+    total_cost = 0
+    for product, quantity in cart.items():
+        price = next((p[1] for c in products.values() for p in c if p[0] == product), 0)
+        cost = price * quantity
+        total_cost += cost
+        print(f"{product}: {quantity} x ${price:.2f} = ${cost:.2f}")
+    print(f"Total Cost: ${total_cost:.2f}")
 
 def generate_receipt(name, email, cart, total_cost, address):
-    pass
-
+    print("\nReceipt")
+    print(f"Name: {name}")
+    print(f"Email: {email}")
+    print(f"Address: {address}")
+    print("Items Purchased:")
+    for product, quantity in cart.items():
+        print(f"{product}: {quantity}")
+    print(f"Total Cost: ${total_cost:.2f}")
 
 def validate_name(name):
-    pass
+    return len(name) > 0
 
 def validate_email(email):
-    pass
-
+    return "@" in email and "." in email
 
 def main():
-    pass
+    cart = {}
+    display_categories()
+    display_products(products)
     
+    # Example interaction
+    while True:
+        product = input("\nEnter product name to add to cart (or 'done' to finish): ")
+        if product.lower() == 'done':
+            break
+        quantity = int(input("Enter quantity: "))
+        add_to_cart(cart, product, quantity)
+    
+    display_cart(cart)
+    
+    name = input("Enter your name: ")
+    while not validate_name(name):
+        name = input("Invalid name. Enter your name again: ")
 
-""" The following block makes sure that the main() function is called when the program is run. 
-It also checks that this is the module that's being run directly, and not being used as a module in some other program. 
-In that case, only the part that's needed will be executed and not the entire program """
+    email = input("Enter your email: ")
+    while not validate_email(email):
+        email = input("Invalid email. Enter your email again: ")
+
+    address = input("Enter your address: ")
+    
+    total_cost = sum(next((p[1] for c in products.values() for p in c if p[0] == product), 0) * quantity for product, quantity in cart.items())
+    
+    generate_receipt(name, email, cart, total_cost, address)
+
 if __name__ == "__main__":
     main()
