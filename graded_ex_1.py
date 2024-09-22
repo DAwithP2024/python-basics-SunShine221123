@@ -47,6 +47,11 @@ def display_sorted_products(products_list, sort_order):
 def add_to_cart(cart, product, quantity):
     cart.append((product, quantity))
 
+# Function to display cart
+def display_cart(cart):
+    for i, (product, quantity) in enumerate(cart, 1):
+        print(f"{i}. {product} - Quantity: {quantity}")
+
 # Function to generate receipt
 def generate_receipt(name, email, cart, total_cost, address):
     print("\nReceipt")
@@ -127,3 +132,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
